@@ -1,0 +1,6 @@
+[submodule ".devcontainer/cmw-cmx-python"]
+	path = .devcontainer/3rdparty/cmw-cmx-python
+	url = https://gitlab.cern.ch/cmx/cmw-cmx-python.git
+[submodule ".devcontainer/cmw-cmx"]
+	path = .devcontainer/3rdparty/cmw-cmx
+	url = https://gitlab.cern.ch/cmx/cmw-cmx.git
