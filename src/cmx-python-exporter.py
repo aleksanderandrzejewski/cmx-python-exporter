@@ -114,7 +114,11 @@ def render_prometheus(stream):
         for component in cmx.Registry.list():
                 if component.name() == "_":
                         continue
-                process = processes[component.processId()]
+
+                try:
+                        process_name = processes[component.processId()].getName()
+                except:
+                        process_name="N/A"
 
                 for metric in component.list():
 
@@ -126,7 +130,7 @@ def render_prometheus(stream):
                         if "=" in name or "(" in name or "*" in name or "\\" in name:
                                 continue
 
-                        stream.write('%s{process="%s", host="%s", component="%s"} %d\n' %(preparePrometheusMetricName(name), process.getName(), process.getHostName(), preparePrometheusMetricName(component.name()), metric.value()))
+                        stream.write('%s{process="%s", host="%s", component="%s"} %d\n' %(preparePrometheusMetricName(name), process_name, process.getHostName(), preparePrometheusMetricName(component.name()), metric.value()))
 
 
 def preparePrometheusMetricName(string):
