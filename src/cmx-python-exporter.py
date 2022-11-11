@@ -32,6 +32,19 @@ def render_prometheus(stream):
                 if component.name() == "_":
                         continue
 
+                labels = []
+
+                for metric in component.list():
+                    if isinstance(metric, cmx.CmxImmutableString):
+                        if metric.name() == "prometheus_labels":
+
+                            labels = metric.value().split(" ")
+
+                            # keep labels matching to format label1=value1
+                            labels = filter(lambda label: len(label.split("=")) == 2, labels)
+
+                labels.append('component="%s"' %preparePrometheusMetricName(component.name()))
+
                 for metric in component.list():
 
                         name = metric.name()
@@ -42,7 +55,7 @@ def render_prometheus(stream):
                         if "=" in name or "(" in name or "*" in name or "\\" in name:
                                 continue
 
-                        stream.write('%s{component="%s"} %d\n' %(preparePrometheusMetricName(name), preparePrometheusMetricName(component.name()), metric.value()))
+                        stream.write('%s{%s} %d\n' %(preparePrometheusMetricName(name), ", ".join(labels) , metric.value()))
 
 
 def preparePrometheusMetricName(string):
