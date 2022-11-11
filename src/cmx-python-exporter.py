@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re
 from BaseHTTPServer import BaseHTTPRequestHandler
 from SocketServer import TCPServer
 from json import dump as json_dump
@@ -40,8 +41,7 @@ def render_prometheus(stream):
 
                             labels = metric.value().split(" ")
 
-                            # keep labels matching to format label1=value1
-                            labels = filter(lambda label: len(label.split("=")) == 2, labels)
+                            labels = filter(lambda label: re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*="[^"]*"$', label), labels)
 
                 labels.append('component="%s"' %preparePrometheusMetricName(component.name()))
 
