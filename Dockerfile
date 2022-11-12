@@ -20,4 +20,4 @@ PKG_CONFIG_PATH="/tmp/3rdparty/cmw-cmx" \
 PYTHONPATH="$PYTHONPATH:/usr/local/lib/python2.7/site-packages/cmx-python:/usr/local/lib64/python2.7/site-packages/cmx-python" \
 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib:/usr/lib64"
 CMD ["./cmx-python-exporter.py"]
-EXPOSE 8080
+EXPOSE 9976
