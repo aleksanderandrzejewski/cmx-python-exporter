@@ -38,25 +38,28 @@ def render_prometheus(stream):
                 for metric in component.list():
                     if isinstance(metric, cmx.CmxImmutableString):
                         if metric.name() == "prometheus_labels":
-
                             labels = metric.value().split(" ")
-
-                            labels = filter(lambda label: re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*="[^"]*"$', label), labels)
-
-                labels.append('component="%s"' %preparePrometheusMetricName(component.name()))
+                            labels = filter(lambda label: isValidLabel(label), labels)
+                
+                labels.append('component="%s"' %component.name().replace("\"", "_"))
 
                 for metric in component.list():
-
-                        name = metric.name()
 
                         if isinstance(metric, cmx.CmxImmutableString):
                                 continue
 
-                        if "=" in name or "(" in name or "*" in name or "\\" in name:
+                        name = preparePrometheusMetricName(metric.name())
+
+                        if not isValidMetricName(name):
                                 continue
 
-                        stream.write('%s{%s} %d\n' %(preparePrometheusMetricName(name), ", ".join(labels) , metric.value()))
+                        stream.write('%s{%s} %d\n' %(name, ", ".join(labels) , metric.value()))
 
+def isValidMetricName(name):
+    return re.match(r'^[a-zA-Z_:][a-zA-Z0-9_:]*$', name)
+
+def isValidLabel(label):
+    return re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*="[^"]*"$', label)
 
 def preparePrometheusMetricName(string):
         return string.replace("::", "_").replace(" ","_").replace(".", "_")
