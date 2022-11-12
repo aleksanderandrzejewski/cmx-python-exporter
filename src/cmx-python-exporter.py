@@ -62,7 +62,7 @@ def isValidLabel(label):
     return re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*="[^"]*"$', label)
 
 def preparePrometheusMetricName(string):
-        return string.replace("::", "_").replace(" ","_").replace(".", "_")
+        return string.replace(" ","_").replace(".", "_")
 
 def render_json(stream):
     components = map(lambda comp: { "processId" : comp.processId(),
