@@ -37,8 +37,9 @@ def render_prometheus(stream):
 
                 for metric in component.list():
                     if isinstance(metric, cmx.CmxImmutableString):
-                        if metric.name() == "prometheus_labels":
-                            labels = metric.value().split(" ")
+                        if metric.name() == "prometheus_labels" or metric.name() == "labels":
+                            labels = metric.value().split(",")
+                            labels = map(lambda x: x.strip(), labels)
                             labels = filter(lambda label: isValidLabel(label), labels)
                 
                 labels.append('component="%s"' %component.name().replace("\"", "_"))
