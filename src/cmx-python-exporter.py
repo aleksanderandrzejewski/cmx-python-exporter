@@ -4,15 +4,11 @@ import re
 from BaseHTTPServer import BaseHTTPRequestHandler
 from SocketServer import TCPServer
 from json import dump as json_dump
-import logging
 
 import ctypes, os
 ctypes.CDLL('librt.so', mode=ctypes.RTLD_GLOBAL)
 
 import cmx
-
-logging.basicConfig(level=logging.DEBUG)
-LOGGER = logging.getLogger("cmxhttp")
 
 class CMXHTTPServer(TCPServer):
     allow_reuse_address = True
@@ -76,8 +72,6 @@ def render_json(stream):
     return json_dump(components, stream, sort_keys=True, indent=4, separators=(',', ': '))
 
 class CMXHTTPHandler(BaseHTTPRequestHandler):
-    def log_message(self, formatstr, *a):
-        LOGGER.info(formatstr % a)
     def do_GET(self):
         if self.path == "/":
             self.send_response(200, "OK")
