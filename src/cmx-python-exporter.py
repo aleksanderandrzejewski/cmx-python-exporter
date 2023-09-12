@@ -5,7 +5,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler
 from SocketServer import TCPServer
 from json import dump as json_dump
 
-import ctypes, os
+import ctypes
 ctypes.CDLL('librt.so', mode=ctypes.RTLD_GLOBAL)
 
 import cmx
